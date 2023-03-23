@@ -3,6 +3,8 @@ import org.junit.jupiter.api.Test;
 
 import static com.codeborne.selenide.Selenide.webdriver;
 import static com.codeborne.selenide.WebDriverConditions.url;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 public class FirstTest extends BaseTest {
 
@@ -43,5 +45,11 @@ public class FirstTest extends BaseTest {
         page.authorize("", PASSWORD);
         webdriver().shouldHave(url(NO_USERNAME_URL));
         page.getLoginErrorField().shouldHave(Condition.text("Введите логин"));
+    }
+
+    @Test
+    public void checkButton() {
+        MainPage page = new MainPage(BASE_URL);
+        assertThat(page.getLoginText().text(), equalToIgnoringCase("Телефон или адрес эл. почты"));
     }
 }
