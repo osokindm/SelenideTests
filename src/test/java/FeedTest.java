@@ -2,8 +2,6 @@ import Pages.MainPage;
 import com.codeborne.selenide.Condition;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FeedTest extends BaseTest{
@@ -12,17 +10,17 @@ public class FeedTest extends BaseTest{
 
     @Test
     public void newMessages() {
-        MainPage page = loginPage.authorize(BASE_LOGIN, BASE_PASSWORD);
-        int newMessagesNumber = page.getNewMessagesNumber();
-        assertEquals(newMessagesNumber, page
+        MainPage mainPage = loginPage.authorize(BASE_LOGIN, BASE_PASSWORD);
+        int newMessagesNumber = mainPage.getNewMessagesNumber();
+        assertEquals(newMessagesNumber, mainPage
                 .clickOnMessages()
                 .countNewMessages());
     }
 
     @Test
     public void newPost() {
-        MainPage page = loginPage.authorize(BASE_LOGIN, BASE_PASSWORD);
-        page.writeNewPost(TEXT);
-        page.getNewNote().shouldBe(Condition.visible, Duration.ofSeconds(10));
+        MainPage mainPage = loginPage.authorize(BASE_LOGIN, BASE_PASSWORD);
+        mainPage.writeNewPost(TEXT);
+        mainPage.getNewNote().shouldBe(Condition.visible);
     }
 }

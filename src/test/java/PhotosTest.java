@@ -1,16 +1,14 @@
 import Pages.PhotoPage;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
 
 import java.util.Random;
 
-import static com.codeborne.selenide.Selenide.webdriver;
+import static com.codeborne.selenide.Selenide.$$x;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class PhotosTest extends BaseTest{
+public class PhotosTest extends BaseTest {
 
     private final static String BASE_NAME = "new album";
-
 
 
     @Test
@@ -31,8 +29,7 @@ public class PhotosTest extends BaseTest{
                 .authorize(BASE_LOGIN, BASE_PASSWORD)
                 .goToPhotoPage();
         String name = page.deleteLastAlbum();
-        assertEquals(0, webdriver().driver().getWebDriver()
-                .findElements(By.xpath("(//*[@title=\"" + name + "\"])")).size());
+        assertEquals(0, $$x("(//*[@title=\"" + name + "\"])").size());
 
     }
 }

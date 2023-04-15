@@ -1,24 +1,23 @@
 import Pages.GroupPage;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-
-import static com.codeborne.selenide.Selenide.webdriver;
-
-public class GroupsTest extends BaseTest{
-
+public class GroupsTest extends BaseTest {
 
 
     @Test
     public void joinGroup() {
-        GroupPage page = loginPage
+        GroupPage groupPage = loginPage
                 .authorize(BASE_LOGIN, BASE_PASSWORD)
                 .goToGroupPage();
-        int oldValue = Integer.parseInt(page.getGroupCounter().text());
-        page.joinGroup();
-        webdriver().driver().getWebDriver().navigate().refresh();
-        page.getGroupCounter().shouldHave(Condition.text(String.valueOf((oldValue + 1))), Duration.ofSeconds(10));
+        int oldValue = Integer.parseInt(groupPage.getGroupCounter().text());
+        groupPage.joinGroup();
+        Selenide.refresh();
+//        groupPage = new LoginPage()
+//                .authorize(BASE_LOGIN, BASE_PASSWORD).goToGroupPage();
+
+        groupPage.getGroupCounter().shouldHave(Condition.text(String.valueOf((oldValue + 1))));
     }
 
 }

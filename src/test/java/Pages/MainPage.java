@@ -1,41 +1,48 @@
 package Pages;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
 
+import java.util.logging.Logger;
+
+import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.webdriver;
 
 public class MainPage extends BasePage {
-    private final SelenideElement messageButton = $x("//*[@id=\"msg_toolbar_button\"]/div[1]");
-    private final SelenideElement newMessagesCounter = $x("//*[@id=\"counter_ToolbarMessages\"]//*[@class=\"counterText\"]");
-    private final SelenideElement noteField = $x("//*[@class=\"pf-head_itx_a\"]");
-    private final SelenideElement noteFieldLayer = $x("//*[@class=\"media-layer_c js-mlr-block\"]");
-    private final SelenideElement noteFieldEditText = $x("//*[@class=\"posting_itx emoji-tx h-mod js-ok-e js-posting-itx ok-posting-handler\"]");
-    private final SelenideElement groupButton = $x("(//*[@class=\"nav-side_i  __with-ic __with-new-icons\"])[4]");
-    private final SelenideElement photoButton = $x("(//*[@hrefattrs=\"st.cmd=userPhotos&st._aid=NavSideMenu_userPhotos\"])");
-    private final SelenideElement shareButton = $x("//*[@class=\"posting_submit button-pro\"]");
-    private final SelenideElement newNote = $x("//*[@class=\"media-text_a\"]");
+
+    private static final Logger LOGGER = Logger.getLogger(LoginPage.class.getName());
+    private static final SelenideElement NAVIGATION_BLOCK = $x("//*[@id=\"hook_Block_Navigation\"]");
+    private static final SelenideElement MESSAGE_BUTTON = $x("//*[@id=\"msg_toolbar_button\"]/div[1]");
+    private static final SelenideElement NEW_MESSAGES_COUNTER = $x("//*[@id=\"counter_ToolbarMessages\"]//*[@class=\"counterText\"]");
+    private static final SelenideElement NOTE_FIELD = $x("//*[@class=\"pf-head_itx_a\"]");
+    private static final SelenideElement NOTE_FIELD_LAYER = $x("//*[@class=\"media-layer_c js-mlr-block\"]");
+    private static final SelenideElement NOTE_FIELD_EDIT_TEXT = $x("//*[@class=\"posting_itx emoji-tx h-mod js-ok-e js-posting-itx ok-posting-handler\"]");
+    private static final ElementsCollection GROUP_BUTTON = $$x("(//*[@class=\"nav-side_i  __with-ic __with-new-icons\"])");
+    private static final SelenideElement PHOTO_BUTTON = $x("(//*[@hrefattrs=\"st.cmd=userPhotos&st._aid=NavSideMenu_userPhotos\"])");
+    private static final SelenideElement SHARE_BUTTON = $x("//*[@class=\"posting_submit button-pro\"]");
+    private static final SelenideElement NEW_NOTE = $x("//*[@class=\"media-text_a\"]");
+    private static final String NOTIFICATION_BUBBLE = "//*[@id=\"msg_layer\"]//msg-chat-notification-bubble";
 
 
     public MainPage clickOnMessages() {
-        waitUntilByShowUp(messageButton, "waiting for message button to load")
+        waitUntilByShowUp(MESSAGE_BUTTON, null)
                 .click();
         return this;
     }
 
     public GroupPage goToGroupPage() {
-        groupButton.click();
+        GROUP_BUTTON.get(3).click();
         return new GroupPage();
     }
 
     public PhotoPage goToPhotoPage() {
-        photoButton.click();
+        PHOTO_BUTTON.click();
         return new PhotoPage();
     }
 
     public int getNewMessagesNumber() {
-        String counter = newMessagesCounter.text();
+        String counter = NEW_MESSAGES_COUNTER.text();
         if (counter.isEmpty()) {
             counter = "0";
         }
@@ -43,20 +50,23 @@ public class MainPage extends BasePage {
     }
 
     public int countNewMessages() {
-        return webdriver().driver().getWebDriver()
-                .findElements(By.xpath("//*[@id=\"msg_layer\"]//msg-chat-notification-bubble")).size();
+        return $$x(NOTIFICATION_BUBBLE).size();
     }
 
     public void writeNewPost(String text) {
-        noteField.click();
-        waitUntilByShowUp(noteFieldLayer, "waiting for post field to show up");
-        noteFieldEditText.setValue(text);
-        shareButton.click();
+        NOTE_FIELD.click();
+        waitUntilByShowUp(NOTE_FIELD_LAYER, null);
+        NOTE_FIELD_EDIT_TEXT.setValue(text);
+        SHARE_BUTTON.click();
     }
 
     public SelenideElement getNewNote() {
-        return newNote;
+        return NEW_NOTE;
     }
 
-
+    @Override
+    protected void isLoaded() throws Error {
+        NAVIGATION_BLOCK.shouldBe(Condition.visible.because("Main page did not load properly"));
+        LOGGER.info("Pages.MainPage validation succeeded");
+    }
 }

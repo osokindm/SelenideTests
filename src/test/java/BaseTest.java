@@ -7,9 +7,8 @@ import org.junit.jupiter.api.BeforeEach;
 
 public abstract class BaseTest {
 
-    protected final static String BASE_URL = "https://ok.ru";
-    protected final static String BASE_LOGIN = "botS23AT14";
-    protected final static String BASE_PASSWORD = "autotests2023";
+    protected static final String BASE_LOGIN = "botS23AT14";
+    protected static final String BASE_PASSWORD = "autotests2023";
     protected LoginPage loginPage;
 
     public static void setUp() {
@@ -24,7 +23,7 @@ public abstract class BaseTest {
     @BeforeEach
     public void init() {
         setUp();
-        loginPage = new LoginPage(BASE_URL);
+        loginPage = new LoginPage();
     }
 
     @AfterEach
